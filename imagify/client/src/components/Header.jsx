@@ -16,7 +16,8 @@ const Header = () => {
       <p className='text-center max-w-xl mx-auto mt-5 text-stone-500'>
         Create stunning visuals with just a description—experience the power of AI that turns your words into art.
       </p>
-      <button className='sm:text-lg text-white bg-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full'>
+      <button className='sm:text-lg text-white bg-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full hover:scale-105
+      transition-all duration-500'>
         Generate Images 
         <img src={assets.star_group} alt="star" className='h-6'/>
       </button>
@@ -24,7 +25,7 @@ const Header = () => {
       <div className='flex flex-wrap justify-center mt-16 gap-3'> 
         {Array(6).fill('').map((item, index)=>(
             <img className='rounded hover:scale-105 transition-all duration-300 cursor-pointer max-sm:w-10'
-             src={index%2 ==0 ? assets.sample_img_1 : assets.sample_img_2}
+             src={index%2 ===0 ? assets.sample_img_1 : assets.sample_img_2}
               alt='images'
               key={index} width={70}/>
         ))}
