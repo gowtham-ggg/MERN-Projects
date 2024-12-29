@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { assets } from "../assets/assets";
 import { motion } from 'motion/react';
+import { AppContext } from '../Context/AppContext';
 const Result = () => {
 
   const [image, setImage] = useState(assets.sample_img_2);
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
+  
+
+  const {generateImage }= useContext(AppContext)
+
 
   const onSubmitHandler = async (e) => {
-    // done with backend later
+    e.preventDefault()
+    setLoading(true);
+
+    if(input){
+      const image = await generateImage(input)
+
+      if(image){
+        setIsImageLoading(true)
+        setImage(image)
+      }
+    }
+    setLoading(false)
   }
 
   return (
@@ -21,7 +37,7 @@ const Result = () => {
     onSubmit={onSubmitHandler} className='flex flex-col min-h-[90vh] justify-center items-center'>
       <div>
         <div className='relative'>
-          <img src={image} alt="sample" className='m-w-sm rounded ' />
+          <img src={image} alt="sample" className='m-w-sm rounded ' width={500}/>
           <span className={`absolute bottom-0 left-0 h-1 bg-blue-500 ${loading ? 'w-full transition-full durations-[10s]' : 'w-0'}`} />
         </div>
         <p className={!loading ? 'hidden' : ''}>Loading....</p>
