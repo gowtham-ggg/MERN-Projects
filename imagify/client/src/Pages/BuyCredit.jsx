@@ -10,10 +10,9 @@ const BuyCredit = () => {
   const { user, loadCreditsData, backendUrl, token, setShowLogin } = useContext(AppContext);
   const navigate = useNavigate();
 
-  // Initialize Razorpay payment
   const initPay = async (order) => {
     const options = {
-      key: import.meta.env.REACT_APP_KEY_ID, // Razorpay key
+      key: import.meta.env.REACT_APP_KEY_ID, 
       amount: order.amount,
       currency: order.currency,
       name: 'Credits Payment',
@@ -23,13 +22,13 @@ const BuyCredit = () => {
       handler: async (response) => {
         try {
           const { data } = await axios.post(
-            backendUrl + "/api/user/payment-verification", 
+            backendUrl + "/api/user/pay-razor", 
             { paymentDetails: response },
             { headers: { token } }
           );
           if (data.success) {
             toast.success("Payment Successful!");
-            loadCreditsData(); // Update user's credits
+            loadCreditsData(); 
           } else {
             toast.error("Payment verification failed!");
           }
@@ -51,18 +50,17 @@ const BuyCredit = () => {
     rzp.open();
   };
 
-  // Trigger Razorpay payment process
+
   const paymentRazorpay = async (planId) => {
     try {
       if (!user) {
-        setShowLogin(true);  // Show login modal if the user is not logged in
+        setShowLogin(true);  
         return;
       }
 
       const { data } = await axios.post(backendUrl + "/api/user/pay-razor", { planId }, { headers: { token } });
-
       if (data.success) {
-        initPay(data.order);  // Initialize Razorpay with the received order data
+        initPay(data.order);  
       } else {
         toast.error("Failed to create payment order!");
       }

@@ -81,6 +81,9 @@ const userCredits = async (req, res) => {
 const paymentRazorpay = async (req, res) => {
   try {
     const { userId, planId } = req.body;
+
+    console.log("Request received: ", req.body); 
+
     if (!userId || !planId) {
       return res.json({ success: false, message: "Missing Details" });
     }
@@ -112,8 +115,10 @@ const paymentRazorpay = async (req, res) => {
         break;
 
       default:
+        console.log("Plan ID not found:", planId); 
         return res.json({ success: false, message: "Plan Not Found" });
     }
+
     date = Date.now();
 
     const transactionData = {
@@ -132,11 +137,11 @@ const paymentRazorpay = async (req, res) => {
       receipt: newTransaction._id.toString(),
     };
 
-    const order = await razorPayInstance.orders.create(options); 
+    const order = await razorPayInstance.orders.create(options);
 
     res.json({ success: true, order });
   } catch (error) {
-    console.log(error);
+    console.log("Error creating Razorpay order:", error); 
     res.json({ success: false, message: error.message });
   }
 };
