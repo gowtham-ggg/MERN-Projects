@@ -4,12 +4,15 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
   const navigate = useNavigate();
+
+
   const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(true);
 
+
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
-      <img className="w-44 cursor-pointer" src={assets.logo} alt="logo" />
+      <img onClick={()=>navigate("/")} className="w-44 cursor-pointer" src={assets.logo} alt="logo" />
 
       <ul className="hidden md:flex items-start gap-5 font-medium">
         <NavLink to={'/'}>

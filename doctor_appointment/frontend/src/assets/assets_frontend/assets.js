@@ -296,4 +296,18 @@ export const doctors = [
             line2: 'Circle, Ring Road, London'
         }
     },
+    {
+        _id: 'doc16',
+        name: 'Dr. Johnny',
+        image: doc7,
+        speciality: 'Gastroenterologist',
+        degree: 'MD, Dm, MBBS',
+        experience: '12 Years',
+        about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
+        fees: 100,
+        address: {
+            line1: '20th Cross, Richmond',
+            line2: 'Circle, OMR Road, London'
+        }
+    },
 ]
