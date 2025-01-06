@@ -5,13 +5,13 @@ export const AdminContext = createContext()
 
 const AdminContextProvider = (props)=>{
 
-    const [atoken, setAToken] = useState("")
+    const [aToken, setAToken] = useState(localStorage.getItem('aToken')?localStorage.getItem('aToken') : '')
 
     const backendUrl = process.env.REACT_APP_BACKEND_URL
 
 
     const value = {
-        atoken,setAToken,backendUrl
+        aToken,setAToken,backendUrl
     }
 
 
