@@ -302,9 +302,9 @@ export const doctors = [
         image: doc7,
         speciality: 'Gastroenterologist',
         degree: 'MD, Dm, MBBS',
-        experience: '12 Years',
+        experience: '10 Years',
         about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
-        fees: 1500,
+        fees: 5000,
         address: {
             line1: '20th Cross, Richmond Town',
             line2: 'Bangalore, Karnataka, 560025'
