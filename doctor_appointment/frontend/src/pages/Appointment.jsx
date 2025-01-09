@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { data, useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 import { assets } from '../assets/assets_frontend/assets';
 import RelatedDoctors from '../components/RelatedDoctors';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Appointment = () => {
   const { docId } = useParams();
@@ -23,18 +24,23 @@ const Appointment = () => {
   };
 
   const getAvailableSlots = async () => {
+    if (!docInfo || !docInfo.slots_booked) {
+      // If docInfo or docInfo.slots_booked is not available, skip slot generation
+      return;
+    }
+  
     setDocSlots([]);
-
+  
     let today = new Date();
-
+  
     for (let i = 0; i < 7; i++) {
       let currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
-
+  
       let endTime = new Date();
       endTime.setDate(today.getDate() + i);
       endTime.setHours(21, 0, 0, 0);
-
+  
       if (today.getDate() === currentDate.getDate()) {
         currentDate.setHours(currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10);
         currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0);
@@ -42,24 +48,36 @@ const Appointment = () => {
         currentDate.setHours(10);
         currentDate.setMinutes(0);
       }
-
+  
       let timeSlots = [];
-
+  
       while (currentDate < endTime) {
         let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        timeSlots.push({
-          datetime: new Date(currentDate),
-          time: formattedTime,
-        });
-
+  
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth() + 1;
+        let year = currentDate.getFullYear();
+  
+        const slotDate = `${day}_${month}_${year}`;
+        const slotTime = formattedTime;
+  
+        const isSlotAvailable =
+          !docInfo.slots_booked[slotDate] || !docInfo.slots_booked[slotDate].includes(slotTime);
+  
+        if (isSlotAvailable) {
+          timeSlots.push({
+            datetime: new Date(currentDate),
+            time: formattedTime,
+          });
+        }
+  
         currentDate.setMinutes(currentDate.getMinutes() + 30);
       }
-
-      setDocSlots(prev => [...prev, timeSlots]);
+  
+      setDocSlots((prev) => [...prev, timeSlots]);
     }
   };
-
+  
 
   const bookAppointment = async ()=>{
     if(!token){
@@ -76,10 +94,21 @@ const Appointment = () => {
       let year = date.getFullYear()
 
       const slotDate = day + '_' + month + "_" + year
-      console.log(slotDate)
+
+      const {data} = await axios.post(backendUrl + '/api/user/book-appointment',{docId,slotDate,slotTime},{headers : {token}})
+
+      if(data.success){
+        toast.success(data.message)
+      getDoctorsData()
+      navigate('/my-appointments')
+      }
+      else{
+        toast.error(data.message)
+      }
 
     } catch (error) {
-      
+      console.log(error.message)
+      toast.error(error.message)
     }
   }
 

@@ -6,7 +6,8 @@ export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const [doctors, setDoctors] = useState([]);
-  const [token, setToken] = useState(localStorage.getItem("token") ? localStorage.getItem("token") : false);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+
 
   const currencySymbol = "₹";
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
