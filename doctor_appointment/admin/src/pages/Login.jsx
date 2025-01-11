@@ -2,14 +2,20 @@ import React, { useContext, useState } from 'react'
 import { AdminContext } from '../context/AdminContext'
 import axios from "axios"
 import { toast } from 'react-toastify'
+import { DoctorContext } from '../context/DoctorContext'
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
 
     const [state, setState] = useState('Admin')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState("")
-
+    
     const {setAToken,backendUrl} = useContext(AdminContext)
+    const {dToken,setDToken} = useContext(DoctorContext)
+
+    const navigate = useNavigate()
 
     const onSumbitHandler = async (e)=>{
         e.preventDefault()
@@ -26,6 +32,19 @@ const Login = () => {
                 else{
                     toast.error(data.message)
                 }
+            }
+            else{
+                
+                const {data} = await axios.post(backendUrl + '/api/doctor/login',{email,password})
+                if(data.success){
+                    localStorage.setItem('dToken', data.token)
+                    setDToken(data.token)
+                    console.log(data.token)
+                }
+                else{
+                    toast.error(data.message)
+                }
+
             }
             
         } catch (error) {
@@ -47,7 +66,7 @@ const Login = () => {
                 <p>Password</p>
                 <input onChange={(e)=>setPassword(e.target.value)} value={password} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="password" required />
             </div>
-            <button className='bg-primary text-white w-full py-2 rounded-md text-base hover:scale-105 transition-all duration-300'>Login</button>
+            <button  className='bg-primary text-white w-full py-2 rounded-md text-base hover:scale-105 transition-all duration-300'>Login</button>
             {
                 state === 'Admin'
                 ? <p>Doctor Login? <span className='text-primary underline cursor-pointer' onClick={()=>setState('Doctor')}>Click here</span></p>

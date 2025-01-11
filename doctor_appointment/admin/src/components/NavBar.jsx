@@ -2,18 +2,29 @@ import React, { useContext } from 'react'
 import { assets } from '../assets/assets'
 import { AdminContext } from '../context/AdminContext'
 import {useNavigate} from "react-router-dom"
+import { DoctorContext } from '../context/DoctorContext'
 
 const NavBar = () => {
 
     const {aToken, setAToken} = useContext(AdminContext)
+    const {dToken, setDToken} = useContext(DoctorContext)
 
     const navigate = useNavigate()
 
-    const logout=() =>{
-        navigate('/')
-       aToken && setAToken('')
-       aToken && localStorage.removeItem('atoken')
-    }
+    const logout = () => {
+      navigate('/');
+  
+      if (aToken) {
+          setAToken('');
+          localStorage.removeItem('atoken'); // Make sure this key matches the stored key for `aToken`.
+      }
+  
+      if (dToken) {
+          setDToken('');
+          localStorage.removeItem('dtoken'); // Corrected the key for `dToken`.
+      }
+  };
+  
 
   return (
     <div className='flex justify-between items-center px-4 sm:px-10 py-3 border-b bg-white '>
