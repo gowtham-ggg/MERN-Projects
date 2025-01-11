@@ -42,7 +42,7 @@ const AppContextProvider = (props) => {
 
   useEffect(() => {
     getDoctorsData();
-  }, []);
+  }, [getDoctorsData]);
 
   useEffect(() => {
     if (token) {
@@ -50,7 +50,7 @@ const AppContextProvider = (props) => {
     } else {
       setUserData(false);
     }
-  }, [token]);
+  }, [token,loadUserProfileData]);
 
   const value = {
     doctors,getDoctorsData,

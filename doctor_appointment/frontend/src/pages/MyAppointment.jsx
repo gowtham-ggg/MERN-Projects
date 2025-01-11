@@ -124,7 +124,7 @@ const MyAppointment = () => {
       getUsersAppointments();
       getDoctorsData();
     }
-  }, [token]);
+  }, [token,getDoctorsData,getUsersAppointments]);
 
   return (
     <div>
