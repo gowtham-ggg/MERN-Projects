@@ -30,4 +30,7 @@ const doctorList = async (req,res) =>{
     }
 }
 
+//Api for doctor login
+
+
 export {changeAvailability, doctorList}
