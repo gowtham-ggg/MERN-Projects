@@ -114,11 +114,11 @@ const Appointment = () => {
 
   useEffect(() => {
     fetchDocInfo();
-  }, [doctors, docId,fetchDocInfo]);
+  }, [doctors, docId]);
 
   useEffect(() => {
     getAvailableSlots();
-  }, [docInfo,getAvailableSlots]);
+  }, [docInfo]);
 
   useEffect(() => {
     console.log(docSlots);

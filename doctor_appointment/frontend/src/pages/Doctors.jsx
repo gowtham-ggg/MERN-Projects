@@ -21,7 +21,7 @@ const Doctors = () => {
 
   useEffect(()=>{
     applyFilter()
-  },[doctors, speciality,applyFilter])
+  },[doctors, speciality])
 
   return (
     <div >

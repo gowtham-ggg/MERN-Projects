@@ -39,7 +39,7 @@ const NavBar = () => {
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
       </ul>
-        <div className='flex items-center justify-center'><a className='border border-blue-800 px-6 py-3 rounded-full hover:bg-primary hover:text-white transition-all' href="https://adminpannelgg.netlify.app/" target='_blank'>Admin Pannel</a></div>
+        <div className='flex items-center justify-center'><a className='border border-blue-800 px-6 py-3 rounded-full hover:bg-primary hover:text-white transition-all' href="http://localhost:3002/" target='_blank'>Admin Pannel</a></div>
       {token && userData ? (
         <div className="flex items-center gap-1 cursor-pointer group relative">
           <img src={userData.image} alt="profile" className="w-8 rounded-full " />
