@@ -1,24 +1,34 @@
-import express from "express";
-import cors from "cors";
-import userRoutes from "./routes/userRoutes.js";
-import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
+import express from "express"
+import cors from "cors"
+import 'dotenv/config'
+import cookieParser  from "cookie-parser"
+import connectDB from "./config/mongodb.js"
+import authRouter from "./routes/authRoute.js"
 
-const PORT = process.env.PORT || 4000;
+const app = express()
+const port = process.env.PORT || 8000
 
-const app = express();
+//connect database
 
-// Middleware
-app.use(cors());
-app.use(express.json()); 
-app.use(notFound)
-app.use(errorHandler)
+connectDB()
 
-// Routes
-app.use('/api/users', userRoutes); // Mount the user routes
+//middleware
 
-app.get('/', (req, res) => res.send('Server is live 🥳'));
+app.use(express.json())
+app.use(cors({credentials : true}))
+app.use(cookieParser())
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+//API end points
+app.get('/',(req, res)=>{
+    res.send("API WORKING")
+})
+
+app.use('/api/auth',authRouter)
+
+
+
+
+
+app.listen(port, ()=>{
+    console.log(`server started on the port : ${port}`)
+})
