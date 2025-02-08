@@ -8,17 +8,36 @@ export const AppContext = createContext()
 export const AppContextProvider = (props)=>{
 
     const [allCourses, setAllCourses] = useState([])
+    const [isEducator, setIsEducator] = useState(true)
       //Fetch all courses
       const fetchAllCourses = async () =>{
         setAllCourses(dummyCourses)
     }
     const navigate = useNavigate()
 
+    
+
     useEffect(()=>{
         fetchAllCourses()
     },[])
 
-    const value= {allCourses,navigate}
+    //function to calculate average rating of course
+
+    const calculateRating = (course) => {
+        if (!course?.courseRatings || course.courseRatings.length === 0) {
+            return 0;
+        }
+       let totalRating = 0
+       course.courseRatings.forEach(rating =>{
+        totalRating += rating.rating
+       })
+        return (totalRating / course.courseRatings.length);
+    };
+    
+
+
+
+    const value= {allCourses,navigate,calculateRating , isEducator,setIsEducator}
 
   
 
