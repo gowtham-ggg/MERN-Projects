@@ -1,4 +1,0 @@
-[build]
-  base = "lms/client"
-  command = "npm run build"
-  publish = "lms/client/dist"
