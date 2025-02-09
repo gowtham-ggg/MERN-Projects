@@ -2,7 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import humanizeDuration from "humanize-duration";  // Fix import
+import humanizeDuration from "humanize-duration"; // Fix import
+import YouTube from "react-youtube";
+import Footer from "../../components/student/Footer";
+import Rating from "../../components/student/Rating";
 
 const Player = () => {
   const { enrolledCourse = [], calculateChapterTime } = useContext(AppContext);
@@ -25,18 +28,25 @@ const Player = () => {
 
   useEffect(() => {
     getCourseData();
-  }, [enrolledCourse]);  // Add dependency to re-run when `enrolledCourse` updates
+  }, [enrolledCourse]); // Add dependency to re-run when `enrolledCourse` updates
 
   return (
+    <>
     <div className="p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36 ">
       {/* Left column */}
       <div className="text-gray-800">
         <h2 className="text-xl font-semibold">Course Structure</h2>
         <div className="pt-5">
           {courseData?.courseContent?.map((chapter, index) => (
-            <div className="border border-gray-300 bg-white mb-2 rounded" key={index}>
+            <div
+              className="border border-gray-300 bg-white mb-2 rounded"
+              key={index}
+            >
               <div className="flex items-center justify-between px-4 py-3 cursor-pointer select-none">
-                <div onClick={() => toggleSection(index)} className="flex items-center gap-2">
+                <div
+                  onClick={() => toggleSection(index)}
+                  className="flex items-center gap-2"
+                >
                   <img
                     className={`transform transition-transform ${
                       openSection[index] ? "rotate-180" : ""
@@ -44,13 +54,20 @@ const Player = () => {
                     src={assets.down_arrow_icon}
                     alt="down arrow"
                   />
-                  <p className="font-medium md:text-base text-sm">{chapter.chapterTitle}</p>
+                  <p className="font-medium md:text-base text-sm">
+                    {chapter.chapterTitle}
+                  </p>
                 </div>
                 <p className="text-sm md:text-default">
-                  {chapter.chapterContent.length} Lectures - {calculateChapterTime(chapter)}
+                  {chapter.chapterContent.length} Lectures -{" "}
+                  {calculateChapterTime(chapter)}
                 </p>
               </div>
-              <div className={`overflow-hidden transition-all duration-300 ${openSection[index] ? "max-h-96" : "max-h-0"}`}>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  openSection[index] ? "max-h-96" : "max-h-0"
+                }`}
+              >
                 <ul className="list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-300">
                   {chapter.chapterContent.map((lecture, i) => (
                     <li key={i} className="flex items-start gap-2 py-1">
@@ -76,7 +93,12 @@ const Player = () => {
                               Watch
                             </p>
                           )}
-                          <p>{humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ["h", "m"] })}</p>
+                          <p>
+                            {humanizeDuration(
+                              lecture.lectureDuration * 60 * 1000,
+                              { units: ["h", "m"] }
+                            )}
+                          </p>
                         </div>
                       </div>
                     </li>
@@ -86,10 +108,33 @@ const Player = () => {
             </div>
           ))}
         </div>
+        <div className="flex items-center gap-2 py-3 mt-10">
+          <h1 className="text-xl font-bold">Rate this course :</h1>
+          <Rating intialRating={0} />
+        </div>
       </div>
       {/* Right column */}
-      <div></div>
+      <div>
+        {playerData ? (
+          <div className="md:mt-10">
+            <YouTube videoId={playerData.lectureUrl.split('/').pop()}
+              
+              iframeClassName="w-full aspect-video" />
+              <div className="flex justify-between items-center mt-1" >
+                <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
+                <button className="text-blue-600">{false ? 'Completed' : "Mark Complete"}</button>
+              </div>
+          </div>
+        ) : (
+          <img
+            src={courseData ? courseData.courseThumbnail : ""}
+            alt="thumbnail"
+          />
+        )}
+      </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
