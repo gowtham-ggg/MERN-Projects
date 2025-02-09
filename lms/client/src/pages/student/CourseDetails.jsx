@@ -4,12 +4,16 @@ import { AppContext } from "../../context/AppContext";
 import Loading from "../../components/student/Loading";
 import { assets } from "../../assets/assets";
 import humanizeDuration from "humanize-duration";
+import Footer from "../../components/student/Footer";
+import YouTube from "react-youtube";
 
 const CourseDetails = () => {
   const { id } = useParams();
 
   const [courseData, setCourseData] = useState(null);
   const [openSection, setOpenSection] = useState({});
+  const [isAlreadyEnrolled, setAlreadyEnrolled] = useState(false);
+  const [playerData, setPlayerData] = useState(null);
 
   const {
     allCourses,
@@ -33,7 +37,7 @@ const CourseDetails = () => {
 
   useEffect(() => {
     fetchCourseData();
-  }, []);
+  }, [allCourses]);
 
   return courseData ? (
     <>
@@ -131,7 +135,16 @@ const CourseDetails = () => {
                             <p>{lecture.lectureTitle}</p>
                             <div className="flex gap-2">
                               {lecture.isPreviewFree && (
-                                <p className="text-blue-500 cursor-pointer">
+                                <p
+                                  onClick={() =>
+                                    setPlayerData({
+                                      videoId: lecture.lectureUrl
+                                        .split("/")
+                                        .pop(),
+                                    })
+                                  }
+                                  className="text-blue-500 cursor-pointer"
+                                >
                                   Preview
                                 </p>
                               )}
@@ -165,7 +178,15 @@ const CourseDetails = () => {
         {/* Right Column */}
 
         <div className="max-widthcard z-10 shadow roundedt-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]">
-          <img src={courseData.courseThumbnail} alt="thumnail" />
+          {playerData ? (
+            <YouTube
+              videoId={playerData.videoId}
+              opts={{ playerVars: { autoplay: 1 } }}
+              iframeClassName="w-full aspect-video"
+            />
+          ) : (
+            <img src={courseData.courseThumbnail} alt="thumnail" />
+          )}
           <div className="p-5">
             <div className="flex items-center gap-2">
               <img
@@ -200,10 +221,37 @@ const CourseDetails = () => {
                 <p>{calculateRating(courseData)}</p>
               </div>
               <div className="h-4 w-px bg-gray-500/40"></div>
+              <div className="flex items-center gap-1">
+                <img src={assets.time_clock_icon} alt="clock icon" />
+                <p>{calculateCourseDuration(courseData)}</p>
+              </div>
+              <div className="h-4 w-px bg-gray-500/40"></div>
+              <div className="flex items-center gap-1">
+                <img src={assets.lesson_icon} alt="clock icon" />
+                <p>{calculateNoOfLectures(courseData)} Lessons</p>
+              </div>
+            </div>
+            <button className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium">
+              {isAlreadyEnrolled ? "Already Enrolled" : "Enroll Now"}
+            </button>
+
+            <div className="pt-6 ">
+              <p className="md:text-xl text-lg font-medium text-gray-800">
+                What's in the course
+              </p>
+              <ul className="ml-4 pt-2 text-sm md:text-default list-disc text-gray-500">
+                <li>Lifetime access with free updates.</li>
+                <li>Step-by-step, hands-on project guidance.</li>
+                <li>Downloadable resources and source code.</li>
+                <li>Quizzes to test your knowledge.</li>
+                <li>Certificate of completion.</li>
+                <li>Quizzes to test your knowledge.</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+      <Footer />
     </>
   ) : (
     <Loading />
